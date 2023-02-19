@@ -1,0 +1,7 @@
+- Modify info_menu to use exceptions
+- info_menu.cpp make a beautiful menu with ASCII ART
+- Turn "Players" to "Player" when there is only one player.
+- TAKE CARE OF EXCEPTIONS
+- DOCUMENTATION of every function!!!!
+
+- In night_phase RENAME the error classes and generally choose better names.
