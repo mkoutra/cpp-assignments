@@ -5,3 +5,5 @@
 - DOCUMENTATION of every function!!!!
 
 - In night_phase RENAME the error classes and generally choose better names.
+
+- voting_system.cpp Make all the shits of while(1) one single function.
