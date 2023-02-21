@@ -5,5 +5,9 @@
 - DOCUMENTATION of every function!!!!
 
 - In night_phase RENAME the error classes and generally choose better names.
+- In night_phase put the while(1) loops in a separate function, same as voting_system.
 
 - voting_system.cpp Make all the shits of while(1) one single function.
+
+- MAKE CLEAR THE DIFFERENCE BETWEEN PLAYER'S NUMBER AND VECTOR'S index
+  SINCE THE USER GIVES NUMBERS THE WE TRY TO WORK DIRECTLY WITH NUMBERS. 

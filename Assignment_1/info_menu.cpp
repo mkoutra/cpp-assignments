@@ -9,10 +9,11 @@
 
 #define NUM_PLAYERS 7
 
-class Menu_bad_input{};
+class Bad_menu_input{};
 
 void info_menu(vector<int>& vec, int loser_idx);
 void show_options(void);
+int get_option(void);
 
 void print_still_playing(vector<int>& vec);
 void print_playing_roles (vector<int>& vec);
@@ -30,25 +31,26 @@ int main(void) {
     int loser_index = 6;
     players[loser_index] = -1;
     
-    try{
-        info_menu(players, loser_index);
-    }
-    catch (Menu_bad_input) {
-        info_menu(players, loser_index);
-    }
+    info_menu(players, loser_index);
 
     return 0;
 }
 
+
 void info_menu(vector<int>& vec, int loser_idx) {
-    int choice = 0;
-    
     show_options();
 
-    if ( !(cin >> choice) || choice < 1 || choice > 4) {
-        cerr << "\nBad input in menu. Please try again\n";
-        throw Menu_bad_input();
-    };
+    int choice = 0;
+
+    while (1) {// Keep asking user until they give valid input.
+        try {
+            choice = get_option();
+            break;
+        }
+        catch (Bad_menu_input) {
+            cerr << "Bad_menu_input. Please try again. ";
+        }
+    }
 
     switch(choice) {
         case 1: 
@@ -80,6 +82,18 @@ void show_options(void) {
     cout << "3. Players that have lost." << endl;
     cout << "4. Last player that lost." << endl;
     cout << "\nType the number of your option [1-4] and press [Enter]: ";
+}
+
+// Get menu-option from user.
+int get_option(void) {
+    int option = 0;
+
+    if ( !(cin >> option) || option < 1 || option > 4) {
+        cerr << "\nBad input in menu. Please try again.\n";
+        throw Bad_menu_input();
+    };
+
+    return option;
 }
 
 /*
@@ -130,7 +144,7 @@ void print_playing_roles (vector<int>& vec) {
 }
 
 /*
- * Prints a line with the players that have lost. 
+ * Prints a line with the losers. 
  * Also, prints one dashed line above and below the main line.
  */
 void print_losers (vector<int>& vec) {
