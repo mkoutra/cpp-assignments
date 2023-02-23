@@ -9,6 +9,9 @@
 #include "std_lib_facilities.h"
 
 #define NUM_PLAYERS 7
+#define CIT 0
+#define DOC 1
+#define GANG 2
 
 void initialization(vector<int>& vec);
 void print_vec(vector<int>& vec);
@@ -24,10 +27,8 @@ int main(void) {
 }
 
 /*
- * - Arguments: A vector that represents the players.
- * - Modifies the vector. One element is 1 for the doctor, one element 
- *   is 2 for the gangster and the rest are 0 for the citizens. 
- *   The role of each player is chosen randomly.
+ * Input: A vector that represents the players.
+ * Chooses the role of each player randomly.
 */
 void initialization(vector<int>& vec) {
     try {
@@ -43,20 +44,20 @@ void initialization(vector<int>& vec) {
         doc_idx = rand() % NUM_PLAYERS;
     }
 
-    vec[doc_idx] = 1; // Doctor
-    vec[gang_idx] = 2; // Gangster
+    vec[doc_idx] = DOC; // Doctor
+    vec[gang_idx] = GANG; // Gangster
 
     }
-    catch (out_of_range) {// In case the argument has not the correct size.
-        vec.resize(NUM_PLAYERS);// resize the vector to the corerct size.
-        fill(vec.begin(), vec.end(), 0); // Fill vec with zerores.
+    catch (out_of_range) {// In vector has wrong size.
+        vec.resize(NUM_PLAYERS);// resize to corerct size.
+        fill(vec.begin(), vec.end(), 0); // Fill with zerores.
 
-        initialization(vec);
+        initialization(vec);// call initialization again
     }
 }
 
 void print_vec(vector<int>& vec) {
-    for (int i=0; i<vec.size(); ++i) {
+    for (int i = 0; i < vec.size(); ++i) {
         cout << vec[i] << ' ';
     }
     cout << '\n';

@@ -1,156 +1,149 @@
-/*
- * Implement the night phase.
- * 
- * Each player is represented as a vector element.
- * The value of each element represents the role of each player.
- * Citizen --> 0, Doctor --> 1, Gangster --> 2, Lost --> -1. 
-*/
+// Implement the night phase.
 #include "std_lib_facilities.h"
 #include <limits.h>
 
 #define NUM_PLAYERS 7
+#define CIT 0
+#define DOC 1
+#define GANG 2
+#define LOSER -1
 
-class Bad_input_type_error{};
-class Player_out_of_range_error{};
-class Player_is_out_error{};
-class Player_himself_error{};
-
+void print_vec(const vector<int>&);
+void dashed_line(int);
+int get_player_id(const vector<int>&);
+int get_doctor_save(const vector<int>&, int);
 int night_phase(vector<int>& vec);
-int read_player_number(vector<int>& vec, int self_number);
-void dashed_line(int size);
-void print_vec(vector<int>& vec);
 
 int main(void) {
-    vector<int> players(7, 0);
-    players[2] = 1;
-    players[3] = 2;
-
-    int loser_index = 6;
-    players[loser_index] = -1;
+    vector<int> players = {2, 0, -1, 0, 0, 0, -1};
+    int loser_id = 7;
 
     night_phase(players);
-
     print_vec(players);
 
     return 0;
 }
 
 /* 
- * Implements night phase. Returns the index of the 
- * player which lost. Returns -1 if there is no such a player.
+ * Implements night phase.
+ * Input: A vector containing the players.
+ * Returns the id of the player selected, else -1.
+ * Modifies the vector that represents the players.
 */
 int night_phase(vector<int>& vec) {
-    int gang_choice = -1, doc_choice = -1;
-    int gang_number = -1, doc_number = -1; // Player's number, NOT index.
+    int gangster_id = -1, doctor_id = -1; 
+    int gangster_selection = -1, doctor_selection = -1;
     
-    cout << "--- Night phase ---" << endl;
+    cout << "--- Night phase begins ---" << endl;
     
-    // Find the position of gangster and doctor.
+    /*----- GANGSTER'S AND DOCTOR'S ID -----*/
+
     for (int i = 0; i < vec.size(); ++i) {
-        if (vec[i] == 2) {// Gangster position
-            gang_number = i + 1;
-        }
-        if (vec[i] == 1) {// Doctor position
-            doc_number = i + 1;
-        }
+        if (vec[i] == GANG) gangster_id = i + 1;
+        if (vec[i] == DOC) doctor_id = i + 1;// +1 because we need id.
     }
 
-    cout << "Gangster is Player #" << gang_number << endl;
-    cout << "Doctor is Player #" << doc_number << endl;
+    /*----- GANGSTER'S INPUT -----*/
 
-    while (1) {
+    while (1) {// Keep asking until valid input.
+        cout << "Gangster --> Player #" << gangster_id;
+        cout << ", select a player. >> ";
         try {
-            cout << "Gangster, give the number of the player you want out: ";
-            gang_choice = read_player_number(vec, gang_number);
-            break;
+            gangster_selection = get_player_id(vec);
+            break;// exit while-loop.
         }
-        catch (Bad_input_type_error) {
-            // Clear cin's error flags and input buffer.
+        catch (exception &e) {
+            // Clean input buffer.
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-            cerr << "Bad_input_type_error. Please try again.\n" << endl;
-        }
-        catch (Player_out_of_range_error) {
-            cerr << "\nPlayer_out_of_range_error. Please try again." << endl;
-        }
-        catch (Player_is_out_error) {
-            cerr << "\nPlayer_is_out_error. Please try again." << endl;
-        }
-        catch (Player_himself_error) {
-            cerr << "\nPlayer_himself_error. Please try again." << endl;
+            // Print error message.
+            cerr << e.what() << " Please try again. \n>> ";
         }
     }
 
-    while (1) {
+    /*----- CHECK IF DOCTOR EXISTS -----*/
+
+    if (doctor_id == -1) { // No doctor available
+        // Set the player selected into a loser.
+        vec[gangster_selection - 1] = LOSER;
+
+        // Return id, not index.
+        return gangster_selection; 
+    }
+
+    /*----- DOCTOR'S INPUT -----*/
+
+    while (1) {// Keep asking until valid input.
+        cout << "Doctor --> Player #" << doctor_id;
+        cout << ", save a player. >> ";
         try {
-            cout << "Doctor, give the number of the player you want to save: ";
-            doc_choice = read_player_number(vec, doc_number);
-            break;
+            doctor_selection = get_doctor_save(vec, doctor_id);
+            break;// exit while-loop.
         }
-        catch (Bad_input_type_error) {
-            // Clear cin's error flags and input buffer.
+        catch (exception &e) {
+            // Clean input buffer.
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-            cerr << "\nBad_input_type_error. Please try again:" << endl;
-        }
-        catch (Player_out_of_range_error) {
-            cerr << "\nPlayer_out_of_range_error. Please try again:" << endl;
-        }
-        catch (Player_is_out_error) {
-            cerr << "\nPlayer_is_out_error. Please try again:" << endl;
-        }
-        catch (Player_himself_error) {
-            cerr << "\nPlayer_himself_error. Please try again." << endl;
+            // Print error message.
+            cerr << e.what() << " Please try again. \n>> ";
         }
     }
 
-    if (gang_choice == doc_choice) {
+    /*----- RETURN -----*/
+
+    if (gangster_selection == doctor_selection) {// No player leaves.
         return -1;
     }
     else {
-        vec[gang_choice - 1] = -1; // Change the vector containing the players.
-        return gang_choice - 1; // -1 because we want index.
+        vec[gangster_selection - 1] = LOSER;// Gangster's selection leaves.
+        return gangster_selection;// Return id, not index.
     }
-
 }
 
 /*
- * Reads and returns a player's number from standard input.
- * CAREFUL: It returns the number (#) NOT the index.
+ * Reads and returns a player's id from standard input.
+ * CAREFUL: It returns the id (#) NOT the index.
 */
-int read_player_number(vector<int>& vec, int self_number) {
-    int player_chosen = -1;
-    cin >> player_chosen;
+int get_player_id(const vector<int>& vec) {
+    int id_given = -1;
+    cin >> id_given;
 
-    if (!cin) {// Check if the user gave an integer.
-        throw Bad_input_type_error();
+    // Non integer given.
+    if (!cin) error("Non valid input type.");
+    
+    // Player's id is out of range.
+    if (id_given < 1 || id_given > NUM_PLAYERS) {
+        error("Player chosen is out of range.");
+    }
+    
+    // The player chosen is already out.
+    if (vec[id_given - 1] == LOSER) {
+        error("Player is out.");
     }
 
-    if (player_chosen < 1 || player_chosen > NUM_PLAYERS) {// Player's number is out of range.
-        throw Player_out_of_range_error();
-    }
-
-    if (vec[player_chosen - 1] == -1) {// The player chosen is already out.
-        throw Player_is_out_error();
-    }
-
-    if (player_chosen == self_number) {// The player chose himself.
-        throw Player_himself_error();
-    }
-
-    return player_chosen;
+    return id_given;
 }
 
-// Prints a dashed line with size `size` and a new line character.
+/*
+ * Read and return the id of the player saved by the doctor.
+ * Throws an exception if the doctor peaked himself.
+ * Calls get_player_id(). 
+*/
+int get_doctor_save(const vector<int>& vec, int doc_id) {
+    int save_id = get_player_id(vec);
+    // Doctor can't save himself
+    if (save_id == doc_id) error("Doctor can't save himself.");
+    return save_id;
+}
+
+// Prints a dashed line with the given size.
 void dashed_line(int size) {
-    while (size--) cout << '-';
-    cout << '\n';
+    cout << string(size, '-') << endl;
 }
 
-void print_vec(vector<int>& vec) {
-    for (int i=0; i<vec.size(); ++i) {
+// Print a vector.
+void print_vec(const vector<int>& vec) {
+    for (int i = 0; i < vec.size(); ++i) {
         cout << vec[i] << ' ';
     }
     cout << '\n';
