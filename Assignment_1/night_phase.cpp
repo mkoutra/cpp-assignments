@@ -1,6 +1,5 @@
 // Implement the night phase.
 #include "std_lib_facilities.h"
-#include <limits.h>
 
 #define NUM_PLAYERS 7
 #define CIT 0
@@ -8,14 +7,15 @@
 #define GANG 2
 #define LOSER -1
 
+bool in_vector(const int&, const vector<int>&);
 void print_vec(const vector<int>&);
-void dashed_line(int);
-int get_player_id(const vector<int>&);
-int get_doctor_save(const vector<int>&, int);
+// self_id is an optional argument.
+int get_player_id(const vector<int>&, int self_id = -1);
+int get_valid_id(const vector<int>&, int self_id = -1);
 int night_phase(vector<int>& vec);
 
 int main(void) {
-    vector<int> players = {2, 0, -1, 0, 0, 0, -1};
+    vector<int> players = {2, 0, -1, 1, 0, 0, -1};
     int loser_id = 7;
 
     night_phase(players);
@@ -27,84 +27,58 @@ int main(void) {
 /* 
  * Implements night phase.
  * Input: A vector containing the players.
- * Returns the id of the player selected, else -1.
- * Modifies the vector that represents the players.
+ * Modifies the input vector and returns the id of the player leaving, 
+ * otherwise returns -1.
 */
 int night_phase(vector<int>& vec) {
     int gangster_id = -1, doctor_id = -1; 
-    int gangster_selection = -1, doctor_selection = -1;
+    int gangster_selection, doctor_selection;
     
     cout << "--- Night phase begins ---" << endl;
-    
-    /*----- GANGSTER'S AND DOCTOR'S ID -----*/
 
+    /*----- FIND GANGSTER'S AND DOCTOR'S ID -----*/
     for (int i = 0; i < vec.size(); ++i) {
         if (vec[i] == GANG) gangster_id = i + 1;
-        if (vec[i] == DOC) doctor_id = i + 1;// +1 because we need id.
+        if (vec[i] == DOC) doctor_id = i + 1;// +1 for id
     }
 
     /*----- GANGSTER'S INPUT -----*/
+    cout << "Gangster (Player #" << gangster_id << ") select a player. >> ";
+    gangster_selection = get_valid_id(vec); // get id from user.
 
-    while (1) {// Keep asking until valid input.
-        cout << "Gangster --> Player #" << gangster_id;
-        cout << ", select a player. >> ";
-        try {
-            gangster_selection = get_player_id(vec);
-            break;// exit while-loop.
-        }
-        catch (exception &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
-            cerr << e.what() << " Please try again. \n>> ";
-        }
-    }
-
-    /*----- CHECK IF DOCTOR EXISTS -----*/
-
-    if (doctor_id == -1) { // No doctor available
-        // Set the player selected into a loser.
-        vec[gangster_selection - 1] = LOSER;
-
-        // Return id, not index.
-        return gangster_selection; 
+    /*----- CHECK IF DOCTOR IS OUT -----*/
+    if (in_vector(DOC, vec) == false) { // No doctor available
+        cout << "\nPlayer #" << gangster_selection << " is leaving." << endl;
+        
+        vec[gangster_selection - 1] = LOSER; // gangster's pick leaves.
+        return gangster_selection; // Return id of loser.
     }
 
     /*----- DOCTOR'S INPUT -----*/
-
-    while (1) {// Keep asking until valid input.
-        cout << "Doctor --> Player #" << doctor_id;
-        cout << ", save a player. >> ";
-        try {
-            doctor_selection = get_doctor_save(vec, doctor_id);
-            break;// exit while-loop.
-        }
-        catch (exception &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
-            cerr << e.what() << " Please try again. \n>> ";
-        }
-    }
-
+    cout << "Doctor (Player #" << doctor_id << ") save a player. >> ";
+    doctor_selection = get_valid_id(vec, doctor_id);
+    
     /*----- RETURN -----*/
+    if (gangster_selection == doctor_selection) {// Nobody is leaving.
+        cout << "\nNobody is leaving." << endl;
 
-    if (gangster_selection == doctor_selection) {// No player leaves.
         return -1;
     }
     else {
-        vec[gangster_selection - 1] = LOSER;// Gangster's selection leaves.
-        return gangster_selection;// Return id, not index.
+        cout << "\nPlayer #" << gangster_selection << " is leaving." << endl;
+
+        vec[gangster_selection - 1] = LOSER;
+        return gangster_selection;
     }
 }
 
 /*
  * Reads and returns a player's id from standard input.
- * CAREFUL: It returns the id (#) NOT the index.
+ * The second arg. is optional with default value -1. 
+ * Should be used only when the player is not allowed to vote himself.
+ * Throws and exception if the id is not valid.
 */
-int get_player_id(const vector<int>& vec) {
+int get_player_id(const vector<int>& vec, int self_id) {
     int id_given = -1;
     cin >> id_given;
 
@@ -120,25 +94,49 @@ int get_player_id(const vector<int>& vec) {
     if (vec[id_given - 1] == LOSER) {
         error("Player is out.");
     }
+    
+    // Player chose himself
+    if ((self_id != -1) && (id_given == self_id)) {
+        error("Cannot vote yourself.");
+    }
 
     return id_given;
 }
 
 /*
- * Read and return the id of the player saved by the doctor.
- * Throws an exception if the doctor peaked himself.
- * Calls get_player_id(). 
+ * Reads a player's id using get_player_id() and returns it. 
+ * Handles errors and keeps asking for correct input.
+ * Second arg. is optional. Should be used only when the player is 
+ * not allowed to vote himself.
 */
-int get_doctor_save(const vector<int>& vec, int doc_id) {
-    int save_id = get_player_id(vec);
-    // Doctor can't save himself
-    if (save_id == doc_id) error("Doctor can't save himself.");
-    return save_id;
+int get_valid_id(const vector<int>& vec, int self_id) {
+    int id_given = -1;
+
+    while (1) { // Keep asking until user gives valid input.
+        try {
+            id_given = get_player_id(vec, self_id);
+            break;// exit while-loop.
+        }
+        catch (runtime_error &e) {
+            // Clean input buffer.
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            // Print error message.
+            cerr << e.what() << " Please try again. \n>> ";
+        }
+        catch(...) {
+            cerr << "Error in night phase. Please try again.\n>> ";
+        }
+    }
+    return id_given;
 }
 
-// Prints a dashed line with the given size.
-void dashed_line(int size) {
-    cout << string(size, '-') << endl;
+// Checks if a value is inside a vector.
+bool in_vector(const int& val, const vector<int>& vec) {
+    for (int i : vec) {
+        if (val == i) return true;
+    }
+    return false;
 }
 
 // Print a vector.

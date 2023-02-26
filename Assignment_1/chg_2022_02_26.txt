@@ -1,0 +1,28 @@
+Date: 2022_02_26
+
+- info_menu.cpp
+  - Handle the case when loser_idx = -1.
+  - define NUM_OPTIONS as the number of available options.
+  - Use in_vector().
+
+- night_phase.cpp
+  - Replace exception keyword with runtime_error.
+  - Create get_valid_id().
+  - Use of optional parameter in get_valid_id() and get_player_id().
+  - Delete get_doctor_save().
+  - Delete dashed_line().
+  - Use in_vector().
+  - Delete #include <limits.h>.
+  - Print small messages when night_phase() ends.
+
+
+- Rename voting_day_phase.cpp --> day_phase.cpp
+  - Use optional arguments in get_vote() and get_valid_vote().
+  - Create elections().
+  - Rewrite voting_procedure() using elections().
+  - Delete #include <limits.h>.
+  - Delete dashed_message().
+
+- Update town_of_salem.h.
+
+- Update TODO.txt.

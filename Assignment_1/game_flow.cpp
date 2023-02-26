@@ -3,130 +3,291 @@
 int main(void) {
     vector<int> players(NUM_PLAYERS, 0);
     int last_loser = -1;
-
+    int last_outcome = -1;
     initialization(players);
 
+    info_menu(players, last_loser);
+
     while (1) {
-        info_menu(players, last_loser);
         
         /*----- NIGHT PHASE -----*/
-        last_loser = night_phase(players);
-        if (end_game(players)) break;
+        last_outcome = night_phase(players);
+        if (last_outcome != -1) last_loser = last_outcome;
+        if (is_over(players)) break;
+        
+        /*----- SHOW MENU -----*/
         info_menu(players, last_loser);
         
         /*----- DAY PHASE -----*/
-        last_loser = day_phase(players);
-        if (end_game(players)) break;
+        last_outcome = day_phase(players);
+        if (last_outcome != -1) last_loser = last_outcome;
+        if (is_over(players)) break;
+
+        /*----- SHOW MENU -----*/
         info_menu(players, last_loser);
     }
 
     return 0;
 }
-
-bool end_game(const vector<int>& vec) {
+/*
+ * Given the vector of players it checks if the game is over.
+*/
+bool is_over(const vector<int>& vec) {
     int count_players = 0;
     // Condition #1--> Gangster is out.
-    if (!in_vector(2, vec)) {
-        cout << "Gangster is out !" << endl;
+    if (!in_vector(GANG, vec)) {
+        cout << "GAME OVER!\nGangster is out!\n" << endl;
         return true;
     }
 
     // Condition #2 -- > One player and the gangster.
     for (int i = 0; i < vec.size(); ++i) {
-        if (vec[i] != 2 && vec[i] != -1) {// count citizens and doctor
+        if (vec[i] == CIT || vec[i] == DOC) {// count citizens and doctor
             count_players++;
         }
     }
 
     if (count_players == 1) {
-        cout << "Gangster won" << endl;
+        cout << "GAME OVER!\nGangster won!\n" << endl;
         return true;
     }
 
     return false;
 }
 
+void initialization(vector<int>& vec) {
+    try {
+    // Fill the vector with citizens.
+    fill(vec.begin(), vec.end(), CIT);
+    
+    // Generate random integers in [0,7).
+    srand(time(NULL)); // random seed
+    int gang_idx = rand() % NUM_PLAYERS; // Random index for gangster.
+    int doc_idx = rand() % NUM_PLAYERS; // Random index for doctor.
+    
+    // If the two indices are equal, generate a new index for doctor.
+    while (doc_idx == gang_idx) {
+        doc_idx = rand() % NUM_PLAYERS;
+    }
+
+    vec[doc_idx] = DOC; // Doctor
+    vec[gang_idx] = GANG; // Gangster
+
+    }
+    catch (out_of_range) {// If vector has wrong size.
+        vec.resize(NUM_PLAYERS);// resize to corerct size.
+        fill(vec.begin(), vec.end(), CIT); // Fill with zerores.
+        initialization(vec);
+    }
+}
+
+/*
+ * Implements the info menu.
+ * Input: A vector with the players and the id of the last loser.
+*/
+void info_menu(const vector<int>& vec, int loser_id) {
+    int option_given = -1;
+
+    show_options();
+
+    while (1) { // Keep asking until valid input.
+        try {
+            option_given = get_option(); // get option from user  
+            break;
+        }
+        catch (runtime_error &e) {
+            // Clean input buffer.
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            // Print error message.
+            cerr << e.what() << " Please try again. \n>> ";
+        }
+        catch(...) {
+            cerr << "Error in menu. Try again:\n >> ";
+        }
+    }
+
+    print_request(option_given, vec, loser_id);
+}
+
+// Get an option from user and return it.
+int get_option(void) {
+    int option = 0;
+    cin >> option;
+    // Non integer given.
+    if (!cin) error("Non valid input type.");
+    
+    // Player's id is out of range.
+    if (option < 1 || option > NUM_OPTIONS) {
+        error("Player chosen is out of range.");
+    }
+
+    return option;
+}
+
+// Shows all options available in a single line.
+void show_options(void) {
+    string s;
+    s = "(1) Players | (2) Players & Roles | (3) Losers | (4) Last Loser";
+    
+    cout << "INFO MENU" << endl;
+    dashed_message(s);
+    cout << "Give option [1-4] >> ";
+}
+
+
+/*
+ * Prints the players that correspond to the option number given.
+ * The players are printed between two dashed lines.
+*/
+void print_request(int option_num, const vector<int>& vec, int loser_id) {
+    string s = "|";// here concatenate the string to print.
+
+    switch (option_num) {
+        case 1: {
+            cout << "\nPlayers\n";
+
+            for (int i = 0; i < vec.size(); ++i) {
+                if (vec[i] != LOSER) { // Ignore losers
+                    s += "#" + to_string(i + 1) + " |";
+                }
+            }
+            break;
+        }
+        case 2: {
+            cout << "\nPlayers & Roles\n";
+
+            for (int i = 0; i < vec.size(); ++i) {
+                if (vec[i] != LOSER) { // Ignore losers
+                    s += "#" + to_string(i + 1) + " " + role(vec[i]) + "|";
+                }
+            }
+            break;
+        }
+        case 3: {
+            cout << "\nLosers\n";
+
+            if (in_vector(LOSER, vec) == false) { // Nobody is a loser
+                s += " NONE |";
+                break;
+            }
+            else {
+                for (int i = 0; i < vec.size(); ++i) {
+                    if (vec[i] == LOSER) {
+                        s += "#" + to_string(i + 1) + " |";
+                    }
+                }
+            }
+            break;
+        }
+        case 4: {
+            s =  "Last loser: | ";
+
+            if (loser_id < 0 || loser_id > NUM_PLAYERS) { // out of range
+                s += "NONE |";
+                break;
+            }
+            else {
+                s += "#" + to_string(loser_id) + " |";
+                break;
+            }
+        }
+    }
+
+    dashed_message(s);
+}
+
+// Checks if a value is inside a vector.
+bool in_vector(const int& val, const vector<int>& vec) {
+    for (int i : vec) {
+        if (val == i) return true;
+    }
+    return false;
+}
+
+/*
+ * Returns the role that corresponds to the integer given:
+ * 0 --> Citizen, 1 --> Doctor, 2 --> Gangster, -1 --> Loser. 
+*/
+string role(int digit) {
+    switch(digit) {
+        case 0: 
+            return "Citizen";
+        case 1:
+            return "Doctor";
+        case 2:
+            return "Gangster";
+        case -1:
+            return "Loser";
+        default:
+            error("Non valid role number.");
+    }
+
+    return "";// to avoid compiler's warning
+}
+
+// Prints a message between dashed lines.
+void dashed_message(string s) {
+    cout << string(s.size(), '-') << endl;
+    cout << s << endl;
+    cout << string(s.size(), '-') << endl;
+}
+
 /* 
  * Implements night phase.
  * Input: A vector containing the players.
- * Returns the id of the player selected, else -1.
- * Modifies the vector that represents the players.
+ * Modifies the input vector and returns the id of the player leaving, 
+ * otherwise returns -1.
 */
 int night_phase(vector<int>& vec) {
     int gangster_id = -1, doctor_id = -1; 
-    int gangster_selection = -1, doctor_selection = -1;
+    int gangster_selection, doctor_selection;
     
     cout << "--- Night phase begins ---" << endl;
-    
-    /*----- GANGSTER'S AND DOCTOR'S ID -----*/
 
+    /*----- FIND GANGSTER'S AND DOCTOR'S ID -----*/
     for (int i = 0; i < vec.size(); ++i) {
         if (vec[i] == GANG) gangster_id = i + 1;
-        if (vec[i] == DOC) doctor_id = i + 1;// +1 because we need id.
+        if (vec[i] == DOC) doctor_id = i + 1;// +1 for id
     }
 
     /*----- GANGSTER'S INPUT -----*/
+    cout << "Gangster (Player #" << gangster_id << ") select a player. >> ";
+    gangster_selection = get_valid_id(vec); // get id from user.
 
-    while (1) {// Keep asking until valid input.
-        cout << "Gangster --> Player #" << gangster_id;
-        cout << ", select a player. >> ";
-        try {
-            gangster_selection = get_player_id(vec);
-            break;// exit while-loop.
-        }
-        catch (exception &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
-            cerr << e.what() << " Please try again. \n>> ";
-        }
-    }
-
-    /*----- CHECK IF DOCTOR EXISTS -----*/
-
-    if (doctor_id == -1) { // No doctor available
-        // Set the player selected into a loser.
-        vec[gangster_selection - 1] = LOSER;
-
-        // Return id, not index.
-        return gangster_selection; 
+    /*----- CHECK IF DOCTOR IS OUT -----*/
+    if (in_vector(DOC, vec) == false) { // No doctor available
+        cout << "\nPlayer #" << gangster_selection << " is leaving." << endl;
+        
+        vec[gangster_selection - 1] = LOSER; // gangster's pick leaves.
+        return gangster_selection; // Return id of loser.
     }
 
     /*----- DOCTOR'S INPUT -----*/
-
-    while (1) {// Keep asking until valid input.
-        cout << "Doctor --> Player #" << doctor_id;
-        cout << ", save a player. >> ";
-        try {
-            doctor_selection = get_doctor_save(vec, doctor_id);
-            break;// exit while-loop.
-        }
-        catch (exception &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
-            cerr << e.what() << " Please try again. \n>> ";
-        }
-    }
-
+    cout << "Doctor (Player #" << doctor_id << ") save a player. >> ";
+    doctor_selection = get_valid_id(vec, doctor_id);
+    
     /*----- RETURN -----*/
+    if (gangster_selection == doctor_selection) {// Nobody is leaving.
+        cout << "\nNobody is leaving." << endl;
 
-    if (gangster_selection == doctor_selection) {// No player leaves.
         return -1;
     }
     else {
-        vec[gangster_selection - 1] = LOSER;// Gangster's selection leaves.
-        return gangster_selection;// Return id, not index.
+        cout << "\nPlayer #" << gangster_selection << " is leaving." << endl;
+
+        vec[gangster_selection - 1] = LOSER;
+        return gangster_selection;
     }
 }
 
 /*
  * Reads and returns a player's id from standard input.
- * CAREFUL: It returns the id (#) NOT the index.
+ * The second arg. is optional with default value -1. 
+ * Should be used only when the player is not allowed to vote himself.
+ * Throws and exception if the id is not valid.
 */
-int get_player_id(const vector<int>& vec) {
+int get_player_id(const vector<int>& vec, int self_id) {
     int id_given = -1;
     cin >> id_given;
 
@@ -142,190 +303,43 @@ int get_player_id(const vector<int>& vec) {
     if (vec[id_given - 1] == LOSER) {
         error("Player is out.");
     }
+    
+    // Player chose himself
+    if ((self_id != -1) && (id_given == self_id)) {
+        error("Cannot vote yourself.");
+    }
 
     return id_given;
 }
 
 /*
- * Read and return the id of the player saved by the doctor.
- * Throws an exception if the doctor peaked himself.
- * Calls get_player_id(). 
+ * Reads a player's id using get_player_id() and returns it. 
+ * Handles errors and keeps asking for correct input.
+ * Second arg. is optional. Should be used only when the player is 
+ * not allowed to vote himself.
 */
-int get_doctor_save(const vector<int>& vec, int doc_id) {
-    int save_id = get_player_id(vec);
-    // Doctor can't save himself
-    if (save_id == doc_id) error("Doctor can't save himself.");
-    return save_id;
-}
+int get_valid_id(const vector<int>& vec, int self_id) {
+    int id_given = -1;
 
-// Prints a dashed line with the given size.
-void dashed_line(int size) {
-    cout << string(size, '-') << endl;
-}
-
-// Print a vector.
-void print_vec(const vector<int>& vec) {
-    for (int i = 0; i < vec.size(); ++i) {
-        cout << vec[i] << ' ';
-    }
-    cout << '\n';
-}
-
-
-/*
- * Implements the info menu.
- * Input: A vector with the players and the id of the last loser.
-*/
-void info_menu(const vector<int>& vec, int loser_id) {
-    show_options();
-
-    while (1) {// Keep asking until valid input.
+    while (1) { // Keep asking until user gives valid input.
         try {
-            int option_given = get_option(); // read option from user
-            
-            print_request(option_given, vec, loser_id);
-            
-            break;
+            id_given = get_player_id(vec, self_id);
+            break;// exit while-loop.
         }
-        catch (exception &e) {
+        catch (runtime_error &e) {
             // Clean input buffer.
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             // Print error message.
             cerr << e.what() << " Please try again. \n>> ";
         }
-    }
-}
-
-
-// Get option from user.
-int get_option(void) {
-    int option = 0;
-    // Check if option is an integer and if it is 1 - 4 
-    if ( !(cin >> option) || option < 1 || option > 4) {
-        error("Non valid option.");
-    };
-
-    return option;
-}
-
-// Show all options available.
-void show_options(void) {
-    string s;
-    s = "(1) Players | (2) Players & Roles | (3) Losers | (4) Last Loser";
-    
-    cout << "INFO MENU" << endl;
-
-    dashed_line(s.size());
-    cout << s << endl;
-    dashed_line(s.size());
-    
-    cout << "Give option [1-4] >> ";
-}
-
-
-/*
- * Prints the players that correspond to the option number given.
- * The players are printed between two dashed lines.
-*/
-void print_request(int option_num, const vector<int>& vec, int loser_id) {
-    string s = ""; //string in order to use .size() in dashed_line()
-
-    switch (option_num) {
-        case 1: {
-            s = "Players: | ";
-            for (int i = 0; i < vec.size(); ++i) {
-                if (vec[i] != LOSER) {// Ignore losers
-                    s += "#" + to_string(i + 1) + " | ";
-                }
-            }
-            break;
+        catch(...) {
+            cerr << "Error in night phase. Please try again.\n>> ";
         }
-        case 2: {
-            s = "Players & Roles: | ";
-            for (int i = 0; i < vec.size(); ++i) {
-                if (vec[i] != LOSER) {// Ignore losers
-                    s += "#" + to_string(i + 1) + " " + role(vec[i]) + " |";
-                }
-            }
-            break;
-        }
-        case 3: {
-            s = "Losers: | ";
-            for (int i = 0; i < vec.size(); ++i) {
-                if (vec[i] == LOSER) {// -1 for losers
-                    s += "#" + to_string(i + 1) + " |";
-                }
-            }            
-            break;
-        }
-        case 4:
-            s = "Last loser: | #" + to_string(loser_id) + " |";
-            break;
     }
-    // Print output between two dashed lines.
-    dashed_line(s.size());// same size as s.
-    cout << s << endl;
-    dashed_line(s.size());
+    return id_given;
 }
 
-/*
- * Returns the role that corresponds to the integer given:
- * 0 --> Citizen, 1 --> Doctor, 2 --> Gangster, -1 --> Loser. 
- */
-string role(int digit) {
-    switch(digit) {
-        case 0: 
-            return "Citizen";
-        case 1:
-            return "Doctor";
-        case 2:
-            return "Gangster";
-        case -1:
-            return "Loser";
-        default:
-            error("Non valid role number.");
-    }
-
-    return "";// avoid compiler's warning
-}
-
-/*
- * Input: A vector that represents the players.
- * Chooses the role of each player randomly.
-*/
-void initialization(vector<int>& vec) {
-    try {
-    fill(vec.begin(), vec.end(), 0);// Fill vec with zerores.
-    
-    // Generate random integers from [0,7).
-    srand(time(NULL)); // random seed
-    int gang_idx = rand() % NUM_PLAYERS; // index for gangster.
-    int doc_idx = rand() % NUM_PLAYERS; // index for doctor.
-    
-    // If doc_idx != gang_idx generate a new int for doc_idx.
-    while (doc_idx == gang_idx) {
-        doc_idx = rand() % NUM_PLAYERS;
-    }
-
-    vec[doc_idx] = DOC; // Doctor
-    vec[gang_idx] = GANG; // Gangster
-
-    }
-    catch (out_of_range) {// In vector has wrong size.
-        vec.resize(NUM_PLAYERS);// resize to corerct size.
-        fill(vec.begin(), vec.end(), 0); // Fill with zerores.
-
-        initialization(vec);// call initialization again
-    }
-}
-
-void print_vec(vector<int>& vec) {
-    for (int i = 0; i < vec.size(); ++i) {
-        cout << vec[i] << ' ';
-    }
-    cout << '\n';
-}
 
 /* 
  * Implements Day phase.
@@ -339,88 +353,89 @@ int day_phase(vector<int>& vec) {
     int player_to_kick = voting_procedure(vec);
 
     if (player_to_kick == -1) { // No winner found
-        cout << "No winner" << endl;
+        cout << "\nNobody is leaving." << endl;
     }
     else {// winner found
-        cout << "Player #" << player_to_kick << " leaves." << endl; 
+        cout << "\nPlayer #" << player_to_kick << " is leaving." << endl; 
     }
 
     return player_to_kick;
 }
 
 /* 
- * Implements the voting procedure.
+ * Implementation of the voting system given.
  * Input: A vector containing the players.
- * Returns: The id of the winner, else -1.
- * Modifies the vector that represents the players.
+ * Modifies the vector that represents the players. 
+ * Returns the id of the winner. If there is no winner, it returns -1.
 */
 int voting_procedure(vector<int>& vec) {
-    int number_of_voters = 0; // Counts voters.
-    int voter_choice = -1;// store id given by user.
-    vector<int> ballot_box(NUM_PLAYERS, 0);// Count votes.
-    vector<int> elec_winners;// Contains ids of election winners.
-    
-    dashed_message("Voting procedure");
+    int n_voters = 0; // number of voters.
+    vector<int> winners_ids;
 
-    /*----- FIRST VOTING PROCEDURE-----*/
+    cout << "\n----- Voting -----\n";
 
-    for (int i = 0; i < vec.size(); ++i) {
-        if (vec[i] != LOSER) {// Losers don't vote.
-            cout << "Player #" << (i + 1) << " vote: ";
-            voter_choice = get_vote(vec);// Get user input.
-            ballot_box[voter_choice - 1]++;// Count votes
-            number_of_voters++;// Count voters
-        }
+    for (int i : vec){
+        if (i != -1) n_voters++; // count voters
     }
 
-    elec_winners = find_winners(ballot_box);// save the winners
-
-    /*----- CHECK ELECTION OUTCOME-----*/
+    winners_ids = elections(vec);// winners of 1st voting
 
     // Clear Majority
-    if (elec_winners.size() == 1) {
-        vec[elec_winners[0] - 1] = LOSER;// Modify players' vector
-
-        return elec_winners[0];// Return id of loser.
+    if (winners_ids.size() == 1) { 
+        vec[winners_ids[0] - 1] = LOSER; 
+        return winners_ids[0];
     }
-    else if (elec_winners.size() == number_of_voters){
-        // Same number of votes for all players.
-        return -1;// no winner
+    // Equal votes for everyone
+    else if (winners_ids.size() == n_voters){ 
+        return -1;
     }
-    else {// Tie among some players.
-        fill(ballot_box.begin(), ballot_box.end(), 0);// Reset ballot box
-        dashed_message("Second voting procedure");
+    // Tie among some players.
+    else { 
+        //dashed_message("Second voting");
+        cout << "\n--- 2nd Voting ---\n";
+
+        // Only the winners of the 1st voting can be voted now
+        winners_ids = elections(vec, winners_ids); // winners of 2nd voting
         
-        /*----- SECOND VOTING PROCEDURE-----*/
-
-        for (int i = 0; i < vec.size(); ++i) {
-            if (vec[i] != LOSER) {// Voter is not a loser.
-                cout << "Player #" << (i + 1) << " vote: ";
-                // Only players in elec_winners can be voted.
-                voter_choice = get_vote(vec, elec_winners);
-                ballot_box[voter_choice - 1]++;// Count votes.                
-            }
+        if (winners_ids.size() == 1) {// Clear Majority.
+            vec[winners_ids[0] - 1] = LOSER;
+            return winners_ids[0];
         }
-
-        // Overwrite the result of the 2nd election
-        elec_winners = find_winners(ballot_box); 
-        
-        /*----- SECOND VOTING OUTCOME-----*/
-
-        if (elec_winners.size() == 1) {// Clear Majority.
-            vec[elec_winners[0] - 1] = LOSER;// Modify players' vector
-            return elec_winners[0];
-        }
-        else {
-            return -1; // no winner
+        else {// No winner
+            return -1;
         }
     }
 }
 
+/*
+ * Implements a single voting procedure.
+ * Returns a vector with the winners.
+*/
+vector<int> elections(const vector<int>& vec, vector<int> candidates) {
+    int vote_id = -1;// id given by user.
+    int n_voters = 0;// number of voters
+    vector<int> ballot_box(NUM_PLAYERS, 0);// here we count votes
+    vector<int> winners_ids;// contains the election winners
+
+    for (int i = 0; i < vec.size(); ++i) {
+        if (vec[i] != LOSER) {// Losers don't vote.
+            cout << "Player #" << (i + 1) << " vote: ";
+
+            vote_id = get_valid_vote(vec, candidates);
+            ballot_box[vote_id - 1]++;
+            n_voters++;
+
+        }
+    }
+
+    winners_ids = find_winners(ballot_box);// save the winners_ids
+    
+    return winners_ids;
+}
 
 /*
  * Input: A vector of integers that represents the ballot box.
- * Returns: A vector with players' ids that won the elections.
+ * Returns: A vector with the ids that won the election.
 */
 vector<int> find_winners (const vector<int>& vec) {
     vector<int> winners; // contains the ids of election winners.
@@ -442,77 +457,62 @@ vector<int> find_winners (const vector<int>& vec) {
     return winners;
 }
 
-/* 
- * It throws exception if someone voted someone not included
- * in the candidates list. Candidates is a vector containing the 
- * player's number (#) that can be voted.
+/*
+ * Reads and returns a player's id from standard input.
+ * The second arg. is optional with default value {}. It should be used 
+ * only when we have specific candidates (e.g. in second voting).
+ * Throws and exception if the id is not valid.
 */
-int get_player_id(const vector<int>& vec, const vector<int>& candidates) {
-    int player_chosen = get_player_id(vec);
+int get_vote(const vector<int>& vec, const vector<int> candidates) {
+    int id_given = -1;
+    cin >> id_given;
 
-    if (!in_vector(player_chosen, candidates)) {
+    // Non integer given.
+    if (!cin) error("Non valid input type.");
+    
+    // Player's id is out of range.
+    if (id_given < 1 || id_given > NUM_PLAYERS) {
+        error("Player chosen is out of range.");
+    }
+    
+    // The player chosen is already out.
+    if (vec[id_given - 1] == LOSER) {
+        error("Player is out.");
+    }
+
+    // The playser chosen is not in candidates' list.
+    if (!candidates.empty() && !in_vector(id_given, candidates)) {
         error("Player chosen is not a candidate.");
     }
 
-    return player_chosen;
-}
-
-// Read vote from user.
-int get_vote(const vector<int>& vec) {
-    int vote = -1;
-    
-    while (1) {// Keep asking the user until they give valid input.
-        try {
-            vote = get_player_id(vec);
-            break;
-        }
-        catch (exception &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
-            cerr << e.what() << " Please try again. \n>> ";
-        }
-    }
-
-    return vote;
+    return id_given;
 }
 
 /*
- * Same as get_vote() but it also takes a second vector as an argument.
- * Forbids user to give a number not included in the second vector.
+ * Reads a player's vote using get_vote() and returns it. 
+ * Handles errors and keeps asking for correct input.
+ * Second arg. is optional. It should be used only when we have specific 
+ * candidates (e.g. in second voting).
 */
-int get_vote(const vector<int>& vec, const vector<int>& candidates) {
+int get_valid_vote(const vector<int>& vec, const vector<int> candidates) {
     int vote = -1;
     
     while (1) {// Keep asking the user until they give valid input.
         try {
-            vote = get_player_id(vec, candidates);
+            vote = get_vote(vec, candidates);
             break;
         }
-        catch (exception &e) {
+        catch (runtime_error &e) {
             // Clean input buffer.
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             // Print error message.
             cerr << e.what() << " Please try again. \n>> ";
         }
+        catch(...) {
+            cerr << "Error in day phase. Please try again.\n>> ";
+        }
     }
 
     return vote;
-}
-
-// Checks if a value is inside a vector.
-bool in_vector(const int& val, const vector<int>& vec) {
-    for (int i : vec) {
-        if (val == i) return true;
-    }
-    return false;
-}
-
-// Prints a message between dashed lines.
-void dashed_message(std::string s) {
-    cout << string(s.size(), '-') << endl;
-    cout << s << endl;
-    cout << string(s.size(), '-') << endl;
 }

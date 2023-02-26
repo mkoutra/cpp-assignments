@@ -28,18 +28,19 @@ int main(void) {
 
 /*
  * Input: A vector that represents the players.
- * Chooses the role of each player randomly.
+ * Modifies the input vector by randomly choosing the role of each player. 
 */
 void initialization(vector<int>& vec) {
     try {
-    fill(vec.begin(), vec.end(), 0);// Fill vec with zerores.
+    // Fill the vector with citizens.
+    fill(vec.begin(), vec.end(), CIT);
     
-    // Generate random integers from [0,7).
+    // Generate random integers in [0,7).
     srand(time(NULL)); // random seed
-    int gang_idx = rand() % NUM_PLAYERS; // index for gangster.
-    int doc_idx = rand() % NUM_PLAYERS; // index for doctor.
+    int gang_idx = rand() % NUM_PLAYERS; // Random index for gangster.
+    int doc_idx = rand() % NUM_PLAYERS; // Random index for doctor.
     
-    // If doc_idx != gang_idx generate a new int for doc_idx.
+    // If the two indices are equal, generate a new index for doctor.
     while (doc_idx == gang_idx) {
         doc_idx = rand() % NUM_PLAYERS;
     }
@@ -48,11 +49,10 @@ void initialization(vector<int>& vec) {
     vec[gang_idx] = GANG; // Gangster
 
     }
-    catch (out_of_range) {// In vector has wrong size.
+    catch (out_of_range) {// If vector has wrong size.
         vec.resize(NUM_PLAYERS);// resize to corerct size.
-        fill(vec.begin(), vec.end(), 0); // Fill with zerores.
-
-        initialization(vec);// call initialization again
+        fill(vec.begin(), vec.end(), CIT); // Fill with zerores.
+        initialization(vec);
     }
 }
 

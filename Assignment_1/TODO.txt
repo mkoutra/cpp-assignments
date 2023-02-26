@@ -1,26 +1,13 @@
-- Modify info_menu to use exceptions
-- info_menu.cpp make a beautiful menu with ASCII ART
 - Turn "Players" to "Player" when there is only one player.
-- TAKE CARE OF EXCEPTIONS
-- DOCUMENTATION of every function!!!!
 
-- In night_phase RENAME the error classes and generally choose better names.
-- In night_phase put the while(1) loops in a separate function, same as voting_system.
-
-- voting_system.cpp Make all the shits of while(1) one single function.
-
-- MAKE CLEAR THE DIFFERENCE BETWEEN PLAYER'S NUMBER AND VECTOR'S index
-  SINCE THE USER GIVES NUMBERS THEN WE TRY TO WORK DIRECTLY WITH NUMBERS.
-
-- ERROR HANDLING !!
-
-- In voting_system.cpp, check what happens when all players are losers.
-
-- CHANGE RULES IN A WAY THAT THE PLAYERS CAN VOTE THEMSELFS.
+- In day_phase.cpp, check what happens when all players are losers.
 
 - Understand cin.clear() and cin.ignore().\
 
-- IDEA: define variable CIT, DOC, GANG with values 0, 1, 2 
-   to make code more readable
+- Check what happens with Ctrl+D.
 
-- In info_menu fix the case where loser_id is not a valid number as is the case at the beginning of the program
+- Add an option to close the game.
+
+- Check the comments of every function.
+
+- Write a much better README.txt. 
