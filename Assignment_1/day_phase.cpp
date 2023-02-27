@@ -150,28 +150,33 @@ vector<int> find_winners (const vector<int>& vec) {
  * Throws and exception if the id is not valid.
 */
 int get_vote(const vector<int>& vec, const vector<int> candidates) {
-    int id_given = -1;
+    double id_given = -1;
     cin >> id_given;
 
-    // Non integer given.
+    // Not a number given.
     if (!cin) error("Non valid input type.");
     
+    // Number given is not integer.
+    if (id_given != (int)id_given) {
+        error("Not an integer.");
+    }
+
     // Player's id is out of range.
     if (id_given < 1 || id_given > NUM_PLAYERS) {
         error("Player chosen is out of range.");
     }
     
     // The player chosen is already out.
-    if (vec[id_given - 1] == LOSER) {
+    if (vec[(int)id_given - 1] == LOSER) {
         error("Player is out.");
     }
 
     // The playser chosen is not in candidates' list.
-    if (!candidates.empty() && !in_vector(id_given, candidates)) {
+    if (!candidates.empty() && !in_vector((int)id_given, candidates)) {
         error("Player chosen is not a candidate.");
     }
 
-    return id_given;
+    return (int)id_given;
 }
 
 /*

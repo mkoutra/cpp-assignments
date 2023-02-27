@@ -23,6 +23,9 @@ Date: 2022_02_26
   - Delete #include <limits.h>.
   - Delete dashed_message().
 
+- game_flow.cpp
+  - Rename end_game() --> is_over() and update it.
+
 - Update town_of_salem.h.
 
 - Update TODO.txt.

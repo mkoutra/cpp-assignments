@@ -10,4 +10,8 @@
 
 - Check the comments of every function.
 
-- Write a much better README.txt. 
+- Write a much better README.txt.
+
+- Create a library.
+
+-Handle double input & the case 1.0.

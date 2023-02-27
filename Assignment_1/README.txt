@@ -10,3 +10,5 @@
   by the gangster is leaving the game.
 
 Players are allowed to vote themselves.
+
+cin reads up to '.' if needs int and leaves . in buffer.

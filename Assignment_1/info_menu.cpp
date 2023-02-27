@@ -63,17 +63,22 @@ void info_menu(const vector<int>& vec, int loser_id) {
 
 // Get an option from user and return it.
 int get_option(void) {
-    int option = 0;
+    double option = 0;
     cin >> option;
     // Non integer given.
     if (!cin) error("Non valid input type.");
     
-    // Player's id is out of range.
-    if (option < 1 || option > NUM_OPTIONS) {
-        error("Player chosen is out of range.");
+    // Number given is not integer.
+    if (option != (int)option) {
+        error("Not an integer.");
     }
 
-    return option;
+    // Option is out of range.
+    if (option < 1 || option > NUM_OPTIONS) {
+        error("Option is out of range.");
+    }
+
+    return (int)option;
 }
 
 // Shows all options available in a single line.
