@@ -8,8 +8,12 @@
 #define GANG 2
 #define LOSER -1
 
-bool in_vector(const int&, const vector<int>&);
+#define EOF_CODE -100
 
+class EOF_error{};
+
+bool in_vector(const int&, const vector<int>&);
+bool is_int(string);
 int get_vote(const vector<int>&, const vector<int> vec = {});
 int get_valid_vote(const vector<int>&,  const vector<int> vec = {});
 
@@ -142,7 +146,6 @@ vector<int> find_winners (const vector<int>& vec) {
 
     return winners;
 }
-
 /*
  * Reads and returns a player's id from standard input.
  * The second arg. is optional with default value {}. It should be used 
@@ -150,33 +153,39 @@ vector<int> find_winners (const vector<int>& vec) {
  * Throws and exception if the id is not valid.
 */
 int get_vote(const vector<int>& vec, const vector<int> candidates) {
-    double id_given = -1;
-    cin >> id_given;
+    int id_given;
+    string s_id_given; // string to handle more possible errors.
 
-    // Not a number given.
-    if (!cin) error("Non valid input type.");
+    cin >> ws; // Ignore leading whitespaces.
+    getline(cin, s_id_given); // read a single line
     
-    // Number given is not integer.
-    if (id_given != (int)id_given) {
-        error("Not an integer.");
+    if (cin.eof()) { // Ctrl+D for Linux, Ctrl+Z for Windows. 
+        throw EOF_error();
     }
+
+    // Non integer given.
+    if (is_int(s_id_given) == false) {
+        error("Not an integer.");
+    } 
+    
+    id_given = stoi(s_id_given);// string to int
 
     // Player's id is out of range.
     if (id_given < 1 || id_given > NUM_PLAYERS) {
-        error("Player chosen is out of range.");
+        error("Player's id is out of range.");
     }
     
     // The player chosen is already out.
-    if (vec[(int)id_given - 1] == LOSER) {
+    if (vec[id_given - 1] == LOSER) {
         error("Player is out.");
     }
 
     // The playser chosen is not in candidates' list.
-    if (!candidates.empty() && !in_vector((int)id_given, candidates)) {
+    if (!candidates.empty() && !in_vector(id_given, candidates)) {
         error("Player chosen is not a candidate.");
     }
 
-    return (int)id_given;
+    return id_given;
 }
 
 /*
@@ -194,14 +203,16 @@ int get_valid_vote(const vector<int>& vec, const vector<int> candidates) {
             break;
         }
         catch (runtime_error &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
+            cin.clear(); // Clean error flag.
             cerr << e.what() << " Please try again. \n>> ";
         }
+        catch(EOF_error) {
+            cin.clear();
+            cerr << "EOF\n";
+            return EOF_CODE;
+        }
         catch(...) {
-            cerr << "Error in day phase. Please try again.\n>> ";
+            cerr << "Error in menu. Please try again. >> ";
         }
     }
 
@@ -214,4 +225,52 @@ bool in_vector(const int& val, const vector<int>& vec) {
         if (val == i) return true;
     }
     return false;
+}
+
+/*
+ * Checks if a string represents integer.
+ * Ignores leading and trailing whitespaces.
+*/
+bool is_int(string s) {
+    int i = 0;
+    //Drop leading whitespaces.
+    while(s[0] == ' ' || s[0] == '\t' || s[0]=='\n') {
+        s = s.substr(1);
+    }
+
+    // Sign check
+    if (s[0] == '+' || s[0] == '-') {
+        s = s.substr(1);
+    }
+    // String containing only whitespaces or '+', '-' 
+    // will be empty at this point (s.size() == 0).
+    if (s.empty()) return false;
+    
+    // Scan string
+    while(s[i] != '\0') {
+        // Digit
+        if ((s[i] >= '0' && s[i] <= '9')) { 
+            i++;
+            continue;
+        }
+        // Trailing whitespaces
+        else if (s[i] == ' ' || s[i] == '\t') { 
+            // scan until end of word
+            while(s[i] != '\0') { 
+                if(s[i] != ' ' && s[i] != '\t' && s[i] != '\n') {
+                    return false; // Non-whitespace found
+                }
+                i++;
+            }
+            return true; // only trailing whitespaces found
+        }
+        // Not digit or whitespace.
+        else {
+            return false;
+        }
+
+        i++;
+    }
+
+    return true;
 }

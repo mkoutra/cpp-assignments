@@ -2,10 +2,6 @@
 
 - In day_phase.cpp, check what happens when all players are losers.
 
-- Understand cin.clear() and cin.ignore().\
-
-- Check what happens with Ctrl+D.
-
 - Add an option to close the game.
 
 - Check the comments of every function.
@@ -14,4 +10,6 @@
 
 - Create a library.
 
--Handle double input & the case 1.0.
+- Handle EOF.
+
+- Merge get_vote and get_player_id  into one function.

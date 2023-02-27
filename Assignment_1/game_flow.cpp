@@ -6,7 +6,9 @@ int main(void) {
     int last_outcome = -1;
     initialization(players);
 
-    info_menu(players, last_loser);
+    if (info_menu(players, last_loser) == EOF_CODE) {
+        return 1;
+    }
 
     while (1) {
         
@@ -16,7 +18,9 @@ int main(void) {
         if (is_over(players)) break;
         
         /*----- SHOW MENU -----*/
-        info_menu(players, last_loser);
+        if (info_menu(players, last_loser) == EOF_CODE) {
+            return 1;
+        }
         
         /*----- DAY PHASE -----*/
         last_outcome = day_phase(players);
@@ -24,11 +28,62 @@ int main(void) {
         if (is_over(players)) break;
 
         /*----- SHOW MENU -----*/
-        info_menu(players, last_loser);
+        if (info_menu(players, last_loser) == EOF_CODE) {
+            return 1;
+        }
     }
 
     return 0;
 }
+
+/*
+ * Checks if a string represents integer.
+ * Ignores leading and trailing whitespaces.
+*/
+bool is_int(string s) {
+    int i = 0;
+    //Drop leading whitespaces.
+    while(s[0] == ' ' || s[0] == '\t' || s[0]=='\n') {
+        s = s.substr(1);
+    }
+
+    // Sign check
+    if (s[0] == '+' || s[0] == '-') {
+        s = s.substr(1);
+    }
+    // String containing only whitespaces or '+', '-' 
+    // will be empty at this point (s.size() == 0).
+    if (s.empty()) return false;
+    
+    // Scan string
+    while(s[i] != '\0') {
+        // Digit
+        if ((s[i] >= '0' && s[i] <= '9')) { 
+            i++;
+            continue;
+        }
+        // Trailing whitespaces
+        else if (s[i] == ' ' || s[i] == '\t') { 
+            // scan until end of word
+            while(s[i] != '\0') { 
+                if(s[i] != ' ' && s[i] != '\t' && s[i] != '\n') {
+                    return false; // Non-whitespace found
+                }
+                i++;
+            }
+            return true; // only trailing whitespaces found
+        }
+        // Not digit or whitespace.
+        else {
+            return false;
+        }
+
+        i++;
+    }
+
+    return true;
+}
+
 /*
  * Given the vector of players it checks if the game is over.
 */
@@ -84,8 +139,9 @@ void initialization(vector<int>& vec) {
 /*
  * Implements the info menu.
  * Input: A vector with the players and the id of the last loser.
+ * Returns 0 for success, otherwise EOF_CODE. 
 */
-void info_menu(const vector<int>& vec, int loser_id) {
+int info_menu(const vector<int>& vec, int loser_id) {
     int option_given = -1;
 
     show_options();
@@ -96,38 +152,48 @@ void info_menu(const vector<int>& vec, int loser_id) {
             break;
         }
         catch (runtime_error &e) {
-            // Clean input buffer.
+            cin.clear(); // Clean error flag.
+            cerr << e.what() << " Please try again. >> ";
+        }
+        catch(EOF_error) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
-            cerr << e.what() << " Please try again. \n>> ";
+            cerr << "EOF\n";
+            return EOF_CODE;
         }
         catch(...) {
-            cerr << "Error in menu. Try again:\n >> ";
+            cerr << "Error in menu. Please try again. >> ";
         }
     }
 
     print_request(option_given, vec, loser_id);
+    return 0;
 }
 
 // Get an option from user and return it.
 int get_option(void) {
-    double option = 0;
-    cin >> option;
-    // Non integer given.
-    if (!cin) error("Non valid input type.");
+    int n_option;
+    string s_option; // string to handle more possible errors.
+
+    cin >> ws; // Ignore leading whitespaces.
+    getline(cin, s_option); // read a single line
     
-    // Number given is not integer.
-    if (option != (int)option) {
-        error("Not an integer.");
+    if (cin.eof()) { // Ctrl+D for Linux, Ctrl+Z for Windows. 
+        throw EOF_error();
     }
 
+    // Non integer given.
+    if (is_int(s_option) == false) {
+        error("Not an integer.");
+    } 
+    
+    n_option = stoi(s_option);// string to int
+
     // Option is out of range.
-    if (option < 1 || option > NUM_OPTIONS) {
+    if (n_option < 1 || n_option > NUM_OPTIONS) {
         error("Option is out of range.");
     }
 
-    return (int)option;
+    return n_option;
 }
 
 // Shows all options available in a single line.
@@ -293,33 +359,39 @@ int night_phase(vector<int>& vec) {
  * Throws and exception if the id is not valid.
 */
 int get_player_id(const vector<int>& vec, int self_id) {
-    double id_given = -1;
-    cin >> id_given;
+    int id_given;
+    string s_id_given; // string to handle more possible errors.
 
-    // Not a number given.
-    if (!cin) error("Non valid input type.");
+    cin >> ws; // Ignore leading whitespaces.
+    getline(cin, s_id_given); // read a single line
     
-    // Number given is not integer.
-    if (id_given != (int)id_given) {
-        error("Not an integer.");
+    if (cin.eof()) { // Ctrl+D for Linux, Ctrl+Z for Windows. 
+        throw EOF_error();
     }
 
-    // Player's id is out of range.
+    // Non integer given.
+    if (is_int(s_id_given) == false) {
+        error("Not an integer.");
+    } 
+    
+    id_given = stoi(s_id_given);// string to int
+
+    // Player is out of range.
     if (id_given < 1 || id_given > NUM_PLAYERS) {
-        error("Player chosen is out of range.");
+        error("Player's id is out of range.");
     }
     
     // The player chosen is already out.
-    if (vec[(int)id_given - 1] == LOSER) {
+    if (vec[id_given - 1] == LOSER) {
         error("Player is out.");
     }
     
     // Player chose himself
-    if ((self_id != -1) && ((int)id_given == self_id)) {
-        error("Cannot vote yourself.");
+    if ((self_id != -1) && (id_given == self_id)) {
+        error("Cannot choose yourself.");
     }
 
-    return (int)id_given;
+    return id_given;
 }
 
 /*
@@ -337,14 +409,16 @@ int get_valid_id(const vector<int>& vec, int self_id) {
             break;// exit while-loop.
         }
         catch (runtime_error &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
+            cin.clear(); // Clean error flag.
             cerr << e.what() << " Please try again. \n>> ";
         }
+        catch(EOF_error) {
+            cin.clear();
+            cerr << "EOF\n";
+            return EOF_CODE;
+        }
         catch(...) {
-            cerr << "Error in night phase. Please try again.\n>> ";
+            cerr << "Error in menu. Please try again. >> ";
         }
     }
     return id_given;
@@ -474,33 +548,39 @@ vector<int> find_winners (const vector<int>& vec) {
  * Throws and exception if the id is not valid.
 */
 int get_vote(const vector<int>& vec, const vector<int> candidates) {
-    double id_given = -1;
-    cin >> id_given;
+    int id_given;
+    string s_id_given; // string to handle more possible errors.
 
-    // Not a number given.
-    if (!cin) error("Non valid input type.");
+    cin >> ws; // Ignore leading whitespaces.
+    getline(cin, s_id_given); // read a single line
     
-    // Number given is not integer.
-    if (id_given != (int)id_given) {
-        error("Not an integer.");
+    if (cin.eof()) { // Ctrl+D for Linux, Ctrl+Z for Windows. 
+        throw EOF_error();
     }
+
+    // Non integer given.
+    if (is_int(s_id_given) == false) {
+        error("Not an integer.");
+    } 
+    
+    id_given = stoi(s_id_given);// string to int
 
     // Player's id is out of range.
     if (id_given < 1 || id_given > NUM_PLAYERS) {
-        error("Player chosen is out of range.");
+        error("Player's id is out of range.");
     }
     
     // The player chosen is already out.
-    if (vec[(int)id_given - 1] == LOSER) {
+    if (vec[id_given - 1] == LOSER) {
         error("Player is out.");
     }
 
     // The playser chosen is not in candidates' list.
-    if (!candidates.empty() && !in_vector((int)id_given, candidates)) {
+    if (!candidates.empty() && !in_vector(id_given, candidates)) {
         error("Player chosen is not a candidate.");
     }
 
-    return (int)id_given;
+    return id_given;
 }
 
 /*
@@ -518,14 +598,16 @@ int get_valid_vote(const vector<int>& vec, const vector<int> candidates) {
             break;
         }
         catch (runtime_error &e) {
-            // Clean input buffer.
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            // Print error message.
+            cin.clear(); // Clean error flag.
             cerr << e.what() << " Please try again. \n>> ";
         }
+        catch(EOF_error) {
+            cin.clear();
+            cerr << "EOF\n";
+            return EOF_CODE;
+        }
         catch(...) {
-            cerr << "Error in day phase. Please try again.\n>> ";
+            cerr << "Error in menu. Please try again. >> ";
         }
     }
 
