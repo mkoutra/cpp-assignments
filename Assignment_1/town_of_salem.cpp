@@ -155,8 +155,7 @@ void initialization(vector<int>& vec) {
 
 /*
  * Implements the info menu. Takes the vector containing the players 
- * and the id of the last loser as input. 
- * Returns 0 for success, otherwise EOF_CODE.
+ * and the id of the last loser as input.
 */
 void info_menu(const vector<int>& vec, int last_loser) {
     int option_given = -1;
