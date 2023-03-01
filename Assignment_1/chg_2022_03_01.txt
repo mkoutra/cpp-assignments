@@ -1,0 +1,4 @@
+Delete EOF_CODE in town_of_salem.h 
+Rethrow an exception.
+try/catch in main to handle EOF_error.
+int info_menu() -- > void info_menu()

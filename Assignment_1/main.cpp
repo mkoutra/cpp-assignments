@@ -8,32 +8,30 @@ int main(void) {
     // Initialization
     initialization(players);
 
-    /*----- SHOW MENU -----*/
-    if (info_menu(players, last_loser) == EOF_CODE) {
+    try {
+        while(is_over(players) == false) {    
+            // Show menu
+            info_menu(players, last_loser);
+            
+            // Night phase. If someone leaves, update last_loser.
+            phase_outcome = night_phase(players);
+            if (phase_outcome != -1) last_loser = phase_outcome;
+            
+            // Check if the game is over.
+            if (is_over(players)) break;
+            
+            // Show menu
+            info_menu(players, last_loser);
+
+            // Day phase. If someone leaves, update last_loser.
+            phase_outcome = day_phase(players);
+            if (phase_outcome != -1) last_loser = phase_outcome;
+        }
+
+        return 0;
+    }
+    catch (EOF_error) {
+        cerr << "EOF\n";
         return 1;
     }
-
-    for(;;) {    
-        /*----- NIGHT PHASE -----*/
-        phase_outcome = night_phase(players);
-        if (phase_outcome != -1) last_loser = phase_outcome;
-        if (is_over(players)) break;
-        
-        /*----- SHOW MENU -----*/
-        if (info_menu(players, last_loser) == EOF_CODE) {
-            return 1;
-        }
-        
-        /*----- DAY PHASE -----*/
-        phase_outcome = day_phase(players);
-        if (phase_outcome != -1) last_loser = phase_outcome;
-        if (is_over(players)) break;
-
-        /*----- SHOW MENU -----*/
-        if (info_menu(players, last_loser) == EOF_CODE) {
-            return 1;
-        }
-    }
-
-    return 0;
 }

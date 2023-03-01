@@ -158,7 +158,7 @@ void initialization(vector<int>& vec) {
  * and the id of the last loser as input. 
  * Returns 0 for success, otherwise EOF_CODE.
 */
-int info_menu(const vector<int>& vec, int last_loser) {
+void info_menu(const vector<int>& vec, int last_loser) {
     int option_given = -1;
 
     string s;
@@ -179,20 +179,16 @@ int info_menu(const vector<int>& vec, int last_loser) {
             cin.clear(); // Clean error flag.
             cerr << e.what() << " Please try again. >> ";
         }
-        catch(EOF_error) {
-            cin.clear();
-            cerr << "EOF\n";
-            return EOF_CODE;
+        catch(EOF_error) { // Re-throw EOF_error
+            throw EOF_error();
         }
         catch(...) {
             cerr << "Error in menu. Please try again. >> ";
         }
     }
 
-    // Print what the user asked.
+    // Print the message that corresponds to the option given.
     print_request(option_given, vec, last_loser);
-
-    return 0;
 }
 
 // Gets an option from user and returns it.
@@ -399,13 +395,11 @@ int get_valid_id(const vector<int>& vec, int self_id) {
             cin.clear(); // Clean error flag.
             cerr << e.what() << " Please try again. \n>> ";
         }
-        catch(EOF_error) {
-            cin.clear();
-            cerr << "EOF\n";
-            return EOF_CODE;
+        catch(EOF_error) { // Re-throw EOF_error.
+            throw EOF_error(); 
         }
         catch(...) {
-            cerr << "Error in menu. Please try again. >> ";
+            cerr << "Error in night phase. Please try again. >> ";
         }
     }
     return id_given;
@@ -580,13 +574,11 @@ int get_valid_vote(const vector<int>& vec, const vector<int> candidates) {
             cin.clear(); // Clean error flag.
             cerr << e.what() << " Please try again. >> ";
         }
-        catch(EOF_error) {
-            cin.clear();
-            cerr << "EOF\n";
-            return EOF_CODE;
+        catch(EOF_error) { // Re-throw EOF_error
+            throw EOF_error();
         }
         catch(...) {
-            cerr << "Error in menu. Please try again. >> ";
+            cerr << "Error in voting. Please try again. >> ";
         }
     }
 

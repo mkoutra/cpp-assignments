@@ -8,8 +8,8 @@
 #define DOC 1 // Doctor 
 #define GANG 2 // Gangster
 #define LOSER -1 // Loser
-#define EOF_CODE -100 // Code to exit when EOF given by user
 
+// In case user gives eof.
 class EOF_error{};
 
 /*----- GENERAL FUNCTIONS -----*/
@@ -25,7 +25,7 @@ void initialization(vector<int>&);
 /*----- INFO MENU -----*/
 int get_option(void);
 void print_request(int, const vector<int>&, int);
-int info_menu(const vector<int>&, int);
+void info_menu(const vector<int>&, int);
 
 /*----- NIGHT PHASE -----*/
 int get_id(const vector<int>&, int self_id = -1);
