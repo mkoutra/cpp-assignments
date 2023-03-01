@@ -215,17 +215,17 @@ template<class R, class A> R narrow_cast(const A& a)
 
 // random number generators. See 24.7.
 
-default_random_engine& get_rand()
-{
-    static default_random_engine ran;
-    return ran;
-};
+// default_random_engine& get_rand()
+// {
+//     static default_random_engine ran;
+//     return ran;
+// };
 
-void seed_randint(int s) { get_rand().seed(s); }
+//void seed_randint(int s) { get_rand().seed(s); }
 
-inline int randint(int min, int max) {  return uniform_int_distribution<>(min, max)(get_rand()); }
+//inline int randint(int min, int max) {  return uniform_int_distribution<>(min, max)(get_rand()); }
 
-inline int randint(int max) { return randint(0, max); }
+//inline int randint(int max) { return randint(0, max); }
 
 //inline double sqrt(int x) { return sqrt(double(x)); }    // to match C++0x
 

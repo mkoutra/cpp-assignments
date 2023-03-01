@@ -1,0 +1,10 @@
+- initialization() change comments and put resize at the top. 
+- Delete try/catch.
+
+Rename get_player_id() -- > get_id()
+Add text in second voting.
+Use get_id() to get_vote().
+Delete show_options().
+Simplify is_over()
+
+Comment 218 - 228 in std_lib_facilities.h

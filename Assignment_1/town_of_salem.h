@@ -1,3 +1,5 @@
+#ifndef TOWN_OF_SALEM_H // include guard
+#define TOWN_OF_SALEM_H
 #include "std_lib_facilities.h"
 
 #define NUM_PLAYERS 7 // Number of players
@@ -15,19 +17,18 @@ void dashed_message(string);
 bool in_vector(const int&, const vector<int>&);
 string role(int);
 bool is_int(string s);
+bool is_over(const vector<int>&);
 
 /*----- INITIALIZATION -----*/
 void initialization(vector<int>&);
 
 /*----- INFO MENU -----*/
 int get_option(void);
-void show_options(void);
 void print_request(int, const vector<int>&, int);
 int info_menu(const vector<int>&, int);
 
 /*----- NIGHT PHASE -----*/
-// self_id is an optional argument.
-int get_player_id(const vector<int>&, int self_id = -1);
+int get_id(const vector<int>&, int self_id = -1);
 int get_valid_id(const vector<int>&, int self_id = -1);
 int night_phase(vector<int>&);
 
@@ -39,5 +40,4 @@ vector<int> elections(const vector<int>&, vector<int> candidates = {});
 int voting_procedure(vector<int>& vec);
 int day_phase(vector<int>&);
 
-/*----- GAME FLOW -----*/
-bool is_over(const vector<int>&);
+#endif// TOWN_OF_SALEM_H
