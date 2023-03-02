@@ -1,3 +1,4 @@
+//Header file for assignment 1
 #ifndef TOWN_OF_SALEM_H // include guard
 #define TOWN_OF_SALEM_H
 #include "std_lib_facilities.h"

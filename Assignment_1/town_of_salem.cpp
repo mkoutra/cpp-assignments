@@ -35,26 +35,22 @@ bool in_vector(const int& val, const vector<int>& vec) {
 */
 string role(int digit) {
     switch(digit) {
-        case 0: 
-            return "Citizen";
-        case 1:
-            return "Doctor";
-        case 2:
-            return "Gangster";
-        case -1:
-            return "Loser";
-        default:
-            error("Non valid role number.");
+        case 0: return "Citizen";
+        case 1: return "Doctor";
+        case 2: return "Gangster";
+        case -1: return "Loser";
+        default: error("Non valid role number.");
     }
-    return "";// to avoid compiler's warning
+    return ""; // to avoid compiler's warning
 }
 
 /*
- * Checks if a string represents an integer 
+ * Checks if a string represents an integer,
  * ignoring leading and trailing whitespaces. 
 */
 bool is_int(string s) {
-    int i = 0;
+    int i = 0;// for scanning
+
     //Drop leading whitespaces.
     while(s[0] == ' ' || s[0] == '\t' || s[0]=='\n') {
         s = s.substr(1);
@@ -77,10 +73,10 @@ bool is_int(string s) {
         }
         // Trailing whitespaces
         else if (s[i] == ' ' || s[i] == '\t') { 
-            // scan until end of word
+            // scan every character until the end of the word
             while(s[i] != '\0') { 
                 if(s[i] != ' ' && s[i] != '\t' && s[i] != '\n') {
-                    return false; // Non-whitespace found
+                    return false; // Not a whitespace found
                 }
                 i++;
             }
@@ -103,7 +99,7 @@ bool is_over(const vector<int>& vec) {
 
     // Gangster is out.
     if (in_vector(GANG, vec) == false) {
-        cout << "GAME OVER!\nGangster is out!\n" << endl;
+        cout << "GAME OVER!\nGangster is out!\n\n";
         return true;
     }
 
@@ -113,7 +109,7 @@ bool is_over(const vector<int>& vec) {
     }
 
     if (still_active == 2) {
-        cout << "GAME OVER!\nGangster won!\n" << endl;
+        cout << "GAME OVER!\nGangster won!\n\n";
         return true;
     }
 
@@ -206,10 +202,11 @@ int get_option(void) {
 
     // Non integer given.
     if (is_int(s_option) == false) {
-        error("Not an integer.");
+        error("Not an integer given.");
     } 
     
-    n_option = stoi(s_option);// string to int
+    // Transform string to int
+    n_option = stoi(s_option);
 
     // Option is out of range.
     if (n_option < 1 || n_option > NUM_OPTIONS) {
@@ -246,7 +243,6 @@ void print_request(int option_num, const vector<int>& vec, int last_loser) {
         }
         case 3: {
             cout << "\nLosers\n";
-
             // Check if a loser exists.
             if (in_vector(LOSER, vec) == false) { // No loser found
                 s += " NONE |";
@@ -265,7 +261,7 @@ void print_request(int option_num, const vector<int>& vec, int last_loser) {
         case 4: {
             s =  "Last loser: | ";
 
-            // Check if last_loser corresponds to a player
+            // Check if last_loser corresponds to an id.
             if (last_loser < 0 || last_loser > NUM_PLAYERS) {// Non valid id.
                 s += "NONE |";
             }
@@ -292,7 +288,7 @@ void print_request(int option_num, const vector<int>& vec, int last_loser) {
 */
 int night_phase(vector<int>& vec) {
     int gangster_id = -1, doctor_id = -1; 
-    int gangster_selection, doctor_selection;
+    int gangster_selection = -1, doctor_selection = -1;
     
     cout << "--- Night phase begins ---\n\n";
 
@@ -308,7 +304,7 @@ int night_phase(vector<int>& vec) {
 
     // Check if doctor is out.
     if (in_vector(DOC, vec) == false) {
-        cout << "\nPlayer #" << gangster_selection << " is leaving." << endl;
+        cout << "\nPlayer #" << gangster_selection << " is leaving.\n";
         
         vec[gangster_selection - 1] = LOSER; // gangster's pick leaves.
         return gangster_selection; // Return id of loser.
@@ -320,11 +316,11 @@ int night_phase(vector<int>& vec) {
     
     // Return
     if (gangster_selection == doctor_selection) {// Nobody is leaving.
-        cout << "\nNobody is leaving." << endl;
+        cout << "\nNobody is leaving.\n";
         return -1;
     }
     else {
-        cout << "\nPlayer #" << gangster_selection << " is leaving." << endl;
+        cout << "\nPlayer #" << gangster_selection << " is leaving.\n";
 
         vec[gangster_selection - 1] = LOSER;
         return gangster_selection;
@@ -333,8 +329,8 @@ int night_phase(vector<int>& vec) {
 
 /*
  * Reads and returns a player's id from standard input.
- * The second arg. is optional with default value -1. 
- * It should be used only when the player is not allowed to vote himself.
+ * The second arg. is optional with default value -1 and it should 
+ * be used only when the player is not allowed to vote himself.
 */
 int get_id(const vector<int>& vec, int self_id) {
     int id_given;
@@ -351,7 +347,7 @@ int get_id(const vector<int>& vec, int self_id) {
 
     // Non integer given.
     if (is_int(s_id_given) == false) {
-        error("Not an integer.");
+        error("Not an integer given.");
     } 
     
     // Transform string to int.
@@ -359,17 +355,17 @@ int get_id(const vector<int>& vec, int self_id) {
 
     // Player is out of range.
     if (id_given < 1 || id_given > NUM_PLAYERS) {
-        error("Player's id is out of range.");
+        error("ID is out of range.");
     }
     
     // The player chosen is already out.
     if (vec[id_given - 1] == LOSER) {
-        error("Player is out.");
+        error("This player is out.");
     }
     
     // Player chose himself
     if ((self_id != -1) && (id_given == self_id)) {
-        error("Cannot choose yourself.");
+        error("You can't choose yourself.");
     }
 
     return id_given;
@@ -378,8 +374,8 @@ int get_id(const vector<int>& vec, int self_id) {
 /*
  * Reads a player's id using get_id() and returns it. 
  * Handles errors and keeps asking for correct input.
- * Second arg. is optional. Should be used only when the player is 
- * not allowed to vote himself.
+ * Second arg. is optional and should be used only when 
+ * the player is not allowed to vote himself.
 */
 int get_valid_id(const vector<int>& vec, int self_id) {
     int id_given = -1;
@@ -392,7 +388,7 @@ int get_valid_id(const vector<int>& vec, int self_id) {
         }
         catch (runtime_error &e) {
             cin.clear(); // Clean error flag.
-            cerr << e.what() << " Please try again. \n>> ";
+            cerr << e.what() << " Please try again. >> ";
         }
         catch(EOF_error) { // Re-throw EOF_error.
             throw EOF_error(); 
@@ -416,14 +412,14 @@ int get_valid_id(const vector<int>& vec, int self_id) {
  * If no player leaves, returns -1.
 */
 int day_phase(vector<int>& vec) {
-    cout << "--- Day phase begins ---" << endl;
+    cout << "\n--- Day phase begins ---\n";
 
     int player_leaving = voting_procedure(vec);
 
-    if (player_leaving == -1) { // No winner found
+    if (player_leaving == -1) { // No player leaves
         cout << "\nNobody is leaving.\n\n";
     }
-    else {// winner found
+    else {// Someone is leaving.
         cout << "\nPlayer #" << player_leaving << " is leaving.\n\n"; 
     }
 
@@ -449,7 +445,7 @@ int voting_procedure(vector<int>& vec) {
 
     // Count voters
     for (int i : vec){
-        if (i != -1) n_voters++; 
+        if (i != LOSER) n_voters++; 
     }
 
     // Winners of 1st voting
@@ -488,13 +484,13 @@ int voting_procedure(vector<int>& vec) {
  * Implements a single voting procedure. Returns a vector with the winners.
  * The first arg, is the vector of the players. 
  * The second arg. is optional and contains a vector with the candidates.
- * It should be used only if a second voting occurs where the candidates are
- * those that tied in first elections. 
+ * This arg. should be used only if a second voting occurs where 
+ * the candidates are those that tied at first voting. 
 */
 vector<int> elections(const vector<int>& vec, vector<int> candidates) {
     int vote_id = -1;// the id given by user.
     int n_voters = 0;// number of voters
-    vector<int> ballot_box(NUM_PLAYERS, 0);// here we count votes
+    vector<int> ballot_box(NUM_PLAYERS, 0);// here we count the votes
     vector<int> winners_ids;// here we put the election winners
 
     // Take the vote of every active player.
@@ -515,20 +511,20 @@ vector<int> elections(const vector<int>& vec, vector<int> candidates) {
 }
 
 /*
- * Given the ballot box vector, it returns the ids of the
- * players that won the elections.
+ * Given the ballot box vector, it returns the 
+ * ids of the players that won the elections.
 */
 vector<int> find_winners (const vector<int>& vec) {
     vector<int> winners;
     int max = vec[0];
     
-    // Find max & store the ids with max to winners.
+    // Find max and store the corresponding ids to winners.
     // NOTE: If the first condition is true, the second is true as well.
     for (int i = 0; i < vec.size(); ++i) {
         // new maximum value
         if (vec[i] > max) {
             max = vec[i];
-            winners.clear(); // New max value -->  new winners.
+            winners.clear(); // New max value --> new winners.
         }
         // Tie or first occurence
         if (vec[i] == max) {
@@ -540,7 +536,7 @@ vector<int> find_winners (const vector<int>& vec) {
 
 /*
  * Reads and returns a player's id from standard input. Calls get_id().
- * The second arg. is optional with default value {}. It should be used 
+ * The second arg. is optional with default value {} and it should be used 
  * only when we have specific candidates (e.g. in second voting).
 */
 int get_vote(const vector<int>& vec, const vector<int> candidates) {
