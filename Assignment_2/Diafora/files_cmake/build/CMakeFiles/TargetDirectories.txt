@@ -1,0 +1,3 @@
+/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/files_cmake/build/CMakeFiles/files_tests.exe.dir
+/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/files_cmake/build/CMakeFiles/edit_cache.dir
+/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/files_cmake/build/CMakeFiles/rebuild_cache.dir

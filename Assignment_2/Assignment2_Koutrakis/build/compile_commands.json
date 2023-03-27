@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/build",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Assignment_2.exe.dir/Assignment_2.cpp.o -c /home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/Assignment_2.cpp",
+  "file": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/Assignment_2.cpp"
+},
+{
+  "directory": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/build",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Assignment_2.exe.dir/Player.cpp.o -c /home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/Player.cpp",
+  "file": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/Player.cpp"
+},
+{
+  "directory": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/build",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Assignment_2.exe.dir/Round.cpp.o -c /home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/Round.cpp",
+  "file": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/Assignment2_Koutrakis/Round.cpp"
+}
+]
