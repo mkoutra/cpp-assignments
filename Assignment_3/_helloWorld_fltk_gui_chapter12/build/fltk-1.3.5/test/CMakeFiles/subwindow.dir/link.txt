@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/subwindow.dir/subwindow.cxx.o -o ../bin/examples/subwindow  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

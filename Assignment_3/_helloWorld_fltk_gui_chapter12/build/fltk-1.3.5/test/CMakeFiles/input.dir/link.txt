@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/input.dir/input.cxx.o -o ../bin/examples/input  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

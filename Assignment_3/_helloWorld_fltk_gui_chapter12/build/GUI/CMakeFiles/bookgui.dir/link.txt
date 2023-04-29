@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbookgui.a CMakeFiles/bookgui.dir/Graph.cpp.o CMakeFiles/bookgui.dir/GUI.cpp.o CMakeFiles/bookgui.dir/Simple_window.cpp.o CMakeFiles/bookgui.dir/Window.cpp.o
+/usr/bin/ranlib libbookgui.a

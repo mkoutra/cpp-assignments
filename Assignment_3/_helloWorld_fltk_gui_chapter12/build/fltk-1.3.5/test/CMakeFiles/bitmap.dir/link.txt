@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/bitmap.dir/bitmap.cxx.o -o ../bin/examples/bitmap  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

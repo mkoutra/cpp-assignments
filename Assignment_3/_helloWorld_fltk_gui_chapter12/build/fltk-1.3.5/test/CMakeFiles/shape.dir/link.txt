@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/shape.dir/shape.cxx.o -o ../bin/examples/shape  ../lib/libfltk.a ../lib/libfltk_gl.a -lGL -lGLU ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/doublebuffer.dir/doublebuffer.cxx.o -o ../bin/examples/doublebuffer  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

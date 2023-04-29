@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/native-filechooser.dir/native-filechooser.cxx.o -o ../bin/examples/native-filechooser  ../lib/libfltk.a ../lib/libfltk_images.a ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig ../lib/libfltk_jpeg.a -lz -lpng -lz -lpng 

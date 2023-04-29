@@ -1,0 +1,1 @@
+/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/gl_overlay.dir/gl_overlay.cxx.o -o ../bin/examples/gl_overlay  ../lib/libfltk.a ../lib/libfltk_gl.a -lGL -lGLU ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

@@ -1,0 +1,315 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"include",
+			"INSTALL_MAN"
+		],
+		"files" : 
+		[
+			"fltk-1.3.5/CMake/install.cmake",
+			"fltk-1.3.5/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 77,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 34,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 39,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 52,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 63,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 75,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 100,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 113,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 9
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 114,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 11
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 115,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 13
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 116,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 15
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 117,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 17
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 118,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 19
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"fltk-1.3.5/FL"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"build/fltk-1.3.5/FL"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "share/fltk",
+			"exportName" : "FLTK-Targets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "fltk_jpeg::@4fb5f2c796286b3b8818",
+					"index" : 31
+				},
+				{
+					"id" : "fluid::@6456e35f19c44cf74229",
+					"index" : 32
+				},
+				{
+					"id" : "fltk::@5ce6bb0544344e650a07",
+					"index" : 26
+				},
+				{
+					"id" : "fltk_forms::@5ce6bb0544344e650a07",
+					"index" : 28
+				},
+				{
+					"id" : "fltk_images::@5ce6bb0544344e650a07",
+					"index" : 30
+				},
+				{
+					"id" : "fltk_gl::@5ce6bb0544344e650a07",
+					"index" : 29
+				}
+			],
+			"paths" : 
+			[
+				"fltk-1.3.5/CMakeFiles/Export/share/fltk/FLTK-Targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "share/fltk",
+			"paths" : 
+			[
+				"build/fltk-1.3.5/etc/FLTKConfig.cmake",
+				"fltk-1.3.5/CMake/FLTK-Functions.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "share/fltk",
+			"paths" : 
+			[
+				"build/fltk-1.3.5/etc/UseFLTK.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"build/fltk-1.3.5/bin/fltk-config"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 10,
+			"component" : "Unspecified",
+			"destination" : "share/man/man1",
+			"paths" : 
+			[
+				{
+					"from" : "fltk-1.3.5/documentation/src/fluid.man",
+					"to" : "fluid.1"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 12,
+			"component" : "Unspecified",
+			"destination" : "share/man/man1",
+			"paths" : 
+			[
+				{
+					"from" : "fltk-1.3.5/documentation/src/fltk-config.man",
+					"to" : "fltk-config.1"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 14,
+			"component" : "Unspecified",
+			"destination" : "share/man/man3",
+			"paths" : 
+			[
+				{
+					"from" : "fltk-1.3.5/documentation/src/fltk.man",
+					"to" : "fltk.3"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 16,
+			"component" : "Unspecified",
+			"destination" : "share/man/man6",
+			"paths" : 
+			[
+				{
+					"from" : "fltk-1.3.5/documentation/src/blocks.man",
+					"to" : "blocks.6"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 18,
+			"component" : "Unspecified",
+			"destination" : "share/man/man6",
+			"paths" : 
+			[
+				{
+					"from" : "fltk-1.3.5/documentation/src/checkers.man",
+					"to" : "checkers.6"
+				}
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 20,
+			"component" : "Unspecified",
+			"destination" : "share/man/man6",
+			"paths" : 
+			[
+				{
+					"from" : "fltk-1.3.5/documentation/src/sudoku.man",
+					"to" : "sudoku.6"
+				}
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "fltk-1.3.5",
+		"source" : "fltk-1.3.5"
+	}
+}

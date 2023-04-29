@@ -1,0 +1,125 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"FL_ADD_LIBRARY"
+		],
+		"files" : 
+		[
+			"fltk-1.3.5/CMake/macros.cmake",
+			"fltk-1.3.5/src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 277,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 72,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 282,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 72,
+				"parent" : 3
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 287,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 72,
+				"parent" : 5
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 311,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 72,
+				"parent" : 7
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"fltk-1.3.5/lib/libfltk.a"
+			],
+			"targetId" : "fltk::@5ce6bb0544344e650a07",
+			"targetIndex" : 26,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"fltk-1.3.5/lib/libfltk_forms.a"
+			],
+			"targetId" : "fltk_forms::@5ce6bb0544344e650a07",
+			"targetIndex" : 28,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"fltk-1.3.5/lib/libfltk_images.a"
+			],
+			"targetId" : "fltk_images::@5ce6bb0544344e650a07",
+			"targetIndex" : 30,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"fltk-1.3.5/lib/libfltk_gl.a"
+			],
+			"targetId" : "fltk_gl::@5ce6bb0544344e650a07",
+			"targetIndex" : 29,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "fltk-1.3.5/src",
+		"source" : "fltk-1.3.5/src"
+	}
+}
