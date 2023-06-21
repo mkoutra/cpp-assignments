@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_4/build",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Assignment_4.dir/PoliticalParty.cpp.o -c /home/michalis/Documents/CSD/CS150/Assignments/Assignment_4/PoliticalParty.cpp",
+  "file": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_4/PoliticalParty.cpp"
+},
+{
+  "directory": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_4/build",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Assignment_4.dir/Assignment_4.cpp.o -c /home/michalis/Documents/CSD/CS150/Assignments/Assignment_4/Assignment_4.cpp",
+  "file": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_4/Assignment_4.cpp"
+}
+]
