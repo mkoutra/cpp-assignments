@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/iconize.dir/iconize.cxx.o -o ../bin/examples/iconize  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

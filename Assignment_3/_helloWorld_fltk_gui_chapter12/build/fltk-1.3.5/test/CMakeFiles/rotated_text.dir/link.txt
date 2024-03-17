@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/rotated_text.dir/rotated_text.cxx.o -o ../bin/examples/rotated_text  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

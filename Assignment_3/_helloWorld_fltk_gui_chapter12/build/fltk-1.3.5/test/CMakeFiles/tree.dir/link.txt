@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/tree.dir/tree.cxx.o -o ../bin/examples/tree  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

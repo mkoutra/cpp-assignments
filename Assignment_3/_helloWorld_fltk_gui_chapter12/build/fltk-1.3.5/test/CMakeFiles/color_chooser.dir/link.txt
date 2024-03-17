@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/color_chooser.dir/color_chooser.cxx.o -o ../bin/examples/color_chooser  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

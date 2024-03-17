@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/symbols.dir/symbols.cxx.o -o ../bin/examples/symbols  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

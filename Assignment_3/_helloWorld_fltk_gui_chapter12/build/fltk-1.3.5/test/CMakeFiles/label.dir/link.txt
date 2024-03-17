@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/label.dir/label.cxx.o -o ../bin/examples/label  ../lib/libfltk.a ../lib/libfltk_forms.a ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

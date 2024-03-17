@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/forms.dir/forms.cxx.o -o ../bin/examples/forms  ../lib/libfltk.a ../lib/libfltk_forms.a ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

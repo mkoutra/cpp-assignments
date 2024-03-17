@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/keyboard.dir/keyboard.cxx.o CMakeFiles/keyboard.dir/keyboard_ui.cxx.o -o ../bin/examples/keyboard  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 

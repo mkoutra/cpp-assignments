@@ -1,3 +1,12 @@
+/*
+ * Main function for assignment 1.
+ * 
+ * Michail E. Koutrakis
+ * Email: m.koutrakis@physics.uoc.gr
+ * Github: https://github.com/mkoutra
+ * March 2023
+*/
+
 #include "town_of_salem.h"
 
 int main(void) {

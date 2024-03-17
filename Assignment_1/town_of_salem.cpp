@@ -1,7 +1,9 @@
 /*
  * This file contains all the functions used in assignment 1 in main.cpp.
  * 
- * Koutrakis Michalis (m.koutrakis@physics.uoc.gr)
+ * Michail E. Koutrakis
+ * Email: m.koutrakis@physics.uoc.gr
+ * Github: https://github.com/mkoutra
  * March 2023
 */
 

@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/CubeView.dir/CubeMain.cxx.o CMakeFiles/CubeView.dir/CubeView.cxx.o CMakeFiles/CubeView.dir/CubeViewUI.cxx.o -o ../bin/examples/CubeView  ../lib/libfltk.a ../lib/libfltk_gl.a ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig -lGL -lGLU 

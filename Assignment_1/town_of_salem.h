@@ -1,4 +1,12 @@
-//Header file for assignment 1
+/*
+ * Header file for assignment 1.
+ * 
+ * Michail E. Koutrakis
+ * Email: m.koutrakis@physics.uoc.gr
+ * Github: https://github.com/mkoutra
+ * March 2023
+*/
+
 #ifndef TOWN_OF_SALEM_H // include guard
 #define TOWN_OF_SALEM_H
 #include "std_lib_facilities.h"

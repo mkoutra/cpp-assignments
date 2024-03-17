@@ -1,1 +1,0 @@
-/usr/bin/c++ -g  -pthread -rdynamic CMakeFiles/mandelbrot.dir/mandelbrot.cxx.o CMakeFiles/mandelbrot.dir/mandelbrot_ui.cxx.o -o ../bin/examples/mandelbrot  ../lib/libfltk.a -Wl,-Bstatic -ldl -Wl,-Bdynamic -lX11 -lXrender -lXft -lfontconfig 
