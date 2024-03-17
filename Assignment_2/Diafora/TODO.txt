@@ -1,8 +1,0 @@
-- info menu:
-  Improve alignment of text in the screen.
-  Try to make independent of text size.
-
-IDEA if I have time: To make a class for the total number of players.
-Replace the vector<Player> with a class. That way I can handle 
-
-create a pointer to the gangster and doctor and use it instead of searching

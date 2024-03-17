@@ -1,8 +1,0 @@
-Create is_int(). Read string instead of double from user.
-- info_menu.cpp
-  - Create EOF_error class
-  - Modify info_menu() to handle EOF.
-  - Change get_option to read string and to use is_int().
-  - define EOF_CODE
-  - Modify info_menu() to return an int. 0 for success EOF_CODE else.
-  - Delete cin.ignore(numeric_limits<streamsize>::max(), '\n') from catch().

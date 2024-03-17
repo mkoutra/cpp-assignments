@@ -1,2 +1,0 @@
-/usr/bin/ar qc libtown_of_salem.a CMakeFiles/town_of_salem.dir/town_of_salem.cpp.o
-/usr/bin/ranlib libtown_of_salem.a

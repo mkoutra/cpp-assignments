@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/files_cmake/build",
-  "command": "/usr/bin/c++   -g -o CMakeFiles/files_tests.exe.dir/files_tests.cpp.o -c /home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/files_cmake/files_tests.cpp",
-  "file": "/home/michalis/Documents/CSD/CS150/Assignments/Assignment_2/files_cmake/files_tests.cpp"
-}
-]

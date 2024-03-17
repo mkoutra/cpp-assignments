@@ -1,4 +1,0 @@
-/home/michalis/Documents/CSD/CS150/Assignments/Assignment_1/build/CMakeFiles/town_of_salem.dir
-/home/michalis/Documents/CSD/CS150/Assignments/Assignment_1/build/CMakeFiles/main.dir
-/home/michalis/Documents/CSD/CS150/Assignments/Assignment_1/build/CMakeFiles/edit_cache.dir
-/home/michalis/Documents/CSD/CS150/Assignments/Assignment_1/build/CMakeFiles/rebuild_cache.dir
