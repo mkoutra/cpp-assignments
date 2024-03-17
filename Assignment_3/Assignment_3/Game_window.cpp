@@ -26,7 +26,7 @@ Game_window::Game_window(Point xy, int w, int h, \
     doc_id(-1),
     day_voters(vec.size()),
     cir_center(700/2, 410/2 + 15), // Background pic is 700*410 pixels
-    t(Point(100, 20), "Night Phase begins! Gangster chose a player."),//35
+    t(Point(100, 20), "Night Phase begins! Gangster choose a player."),//35
     err_t(Point(70, y_max() - 20), ""),
     pl_vec(vec),
     background_img(new Image(Point(1,1), "Night.jpg")),  
@@ -308,7 +308,7 @@ void Game_window::submit(void) {
         // Gangster votes
         if (gang_pick == -1) {
             gang_pick = vote_id;
-            set_text("Doctor, its your turn to chose.");
+            set_text("Doctor, its your turn to choose.");
             return ;
         }
 
